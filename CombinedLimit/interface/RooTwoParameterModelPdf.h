@@ -8,67 +8,62 @@
 #include "TProfile2D.h"
 #include "TString.h"
   
-class RooATGCSemiAnalyticPdf : public RooAbsPdf {
+class RooTwoParameterModelPdf : public RooAbsPdf {
 public:
   
-  enum LimitType{ dkglZ, dg1lZ, dkdg1, notype };
-
-  RooATGCSemiAnalyticPdf ();
-  RooATGCSemiAnalyticPdf (const char * name, const char * title,
+  RooTwoParameterModelPdf ();
+  RooTwoParameterModelPdf (const char * name, const char * title,
 			  RooAbsReal& _x, 
-			  RooAbsReal& _dkg, 
-			  RooAbsReal& _lZ,
-			  RooAbsReal& _dg1,
+			  RooAbsReal& _param1, 
+			  RooAbsReal& _param2,
 			  RooAbsReal& _SM_shape,
-			  const char * parFilename,
-			  const unsigned& lt);
-  RooATGCSemiAnalyticPdf (const RooATGCSemiAnalyticPdf& other, const char * name);
+			  const char * parFilename);
+  RooTwoParameterModelPdf (const RooTwoParameterModelPdf& other, const char * name);
   virtual TObject * clone(const char * newname) const { 
-    return new RooATGCSemiAnalyticPdf(*this, newname);
+    return new RooTwoParameterModelPdf(*this, newname);
     }
   
-  virtual ~RooATGCSemiAnalyticPdf ();
+  virtual ~RooTwoParameterModelPdf ();
   
-  void setLimitType(const unsigned& lt) { type_ = (LimitType)lt; }
-
   Int_t getAnalyticalIntegral(RooArgSet& allVars, 
 			    RooArgSet& analVars, 
 			    const char* rangeName = 0) const;
 
   Double_t analyticalIntegral(Int_t code, const char* rangeName = 0) const;
+  void readProfiles(std::vector<double> bins,TDirectory& dir) const ;
 
-  void readProfiles(TDirectory& dir) const ;
   TString getProfileFilename() const { return profileFilename; }
   
 protected:
   
   RooRealProxy x;
-  RooRealProxy lZ;
-  RooRealProxy dkg;
-  RooRealProxy dg1;
+  RooRealProxy param1;
+  RooRealProxy param2;
   RooRealProxy SM_shape;
   
-  LimitType type_;
-
   mutable std::map<std::string,std::vector<double> > integral_basis;
+
+  mutable std::vector<double> bins; // imporatant to be mutable!!!
+
+
 
   TString profileFilename;
   
-  TProfile2D ** P_dk; //!
-  TProfile2D ** P_dg1; //!
-  TProfile2D ** P_dkdg1; //!
+  TH2D ** P; //!
   
   void initializeProfiles();
+  void initializeBins(const RooAbsReal& shape) const;
   void initializeNormalization(const std::string& rName,
 			       const RooAbsReal& dep,
 			       const RooAbsReal& shape) const;
-  void readProfiles(RooATGCSemiAnalyticPdf const& other);
   
+  void readProfiles(RooTwoParameterModelPdf const& other);
+
   virtual double evaluate() const ;
   
 private:
   
-  ClassDef(RooATGCSemiAnalyticPdf, 2) // aTGC function 
+  ClassDef(RooTwoParameterModelPdf, 4) 
 };
 
 #endif

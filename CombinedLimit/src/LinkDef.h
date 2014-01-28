@@ -22,9 +22,9 @@
 #include "../interface/RooBernsteinFast.h"
 #include "../interface/RooATGCFunction.h"
 #include "../interface/RooATGCFunction_wz.h"
-#include "../interface/RooATGCProcessScaling.h"
+#include "../interface/RooTwoParameterModelScaling.h"
 #include "../interface/RooATGCProcessScaling_wz.h"
-#include "../interface/RooATGCSemiAnalyticPdf.h"
+#include "../interface/RooTwoParameterModelPdf.h"
 #include "../interface/RooATGCSemiAnalyticPdf_wz.h"
 
 
@@ -109,9 +109,9 @@
 #pragma link C++ class RooBernsteinFast<7>+;
 #pragma link C++ class RooATGCFunction+;
 #pragma link C++ class RooATGCFunction_wz+;
-#pragma link C++ class RooATGCProcessScaling+;
+#pragma link C++ class RooTwoParameterModelScaling+;
 #pragma link C++ class RooATGCProcessScaling_wz+;
-#pragma link C++ class RooATGCSemiAnalyticPdf+;
+#pragma link C++ class RooTwoParameterModelPdf+;
 #pragma link C++ class RooATGCSemiAnalyticPdf_wz+;
 
 #endif
