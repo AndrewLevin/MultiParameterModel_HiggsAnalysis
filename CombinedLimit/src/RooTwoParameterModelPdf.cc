@@ -58,7 +58,6 @@ RooTwoParameterModelPdf::RooTwoParameterModelPdf(const char *name,
     }
     bins_.push_back(rdep.getBinning("").binHigh(i));
   }
-  std::cout << "debug 283.02" << std::endl;
   readProfiles(bins_,*f);
   f->Close();
 } 
@@ -84,7 +83,6 @@ RooTwoParameterModelPdf::RooTwoParameterModelPdf(const RooTwoParameterModelPdf& 
   const char* pwd = gDirectory->GetPath();
   TFile *f = TFile::Open(profileFilename,"READ");  
   gDirectory->cd(pwd);  
-  std::cout << "debug 2382*&" << std::endl;
   readProfiles(bins,*f);
   f->Close();
 } 
@@ -119,7 +117,6 @@ void RooTwoParameterModelPdf::initializeNormalization(const std::string& rName,
   const RooRealVar& rdep = dynamic_cast<const RooRealVar&>(dep);
   int N_bins=rdep.getBinning("").numBins();
   int i;
-  std::cout << "54088 N_bins = " << N_bins << std::endl;
   for(i=0; i<N_bins; ++i) {
 
 
@@ -146,8 +143,6 @@ void RooTwoParameterModelPdf::initializeNormalization(const std::string& rName,
 
 void RooTwoParameterModelPdf::readProfiles(std::vector<double> bins,TDirectory& dir) const {
   
-  std::cout << "readProfiles 0327" << std::endl;
-  std::cout << "bins.size() = " << bins.size() << std::endl;
   assert(bins.size() > 0);
   int N_bins=bins.size()-1;
   int i;
