@@ -1,5 +1,3 @@
-
-
 from ROOT import *
 from array import array
 import sys
@@ -10,7 +8,14 @@ from ROOT import TGraph
 #gStyle.SetLegendBorderSize(0);
 gROOT.ForceStyle()
 
-f=TFile("higgsCombineTest.MultiDimFit.mH120.root","r")
+if (len(sys.argv) != 2):
+    print "format: python.py draw_1d_limt_plot.py input_file_name"
+    print "exiting"
+    sys.exit(0)
+
+
+
+f=TFile(sys.argv[1],"r")
 limit=f.Get("limit")
 
 deltaNLL=array("f",[0])
@@ -18,8 +23,6 @@ param=array("f",[0])
 
 limit.SetBranchAddress("deltaNLL", deltaNLL);
 limit.SetBranchAddress("param",param)
-
-print "limit.GetEntries() = "+str(limit.GetEntries())
 
 graph=TGraph()
 
@@ -30,8 +33,6 @@ for j in range(1,limit.GetEntries()-1):
     graph.SetPoint(j-1,param[0],2*deltaNLL[0])
 
 deltaNLL_95=ROOT.Math.chisquared_quantile_c(1-0.95,1)
-
-print "deltaNLL_95 = "+str(deltaNLL_95)
 
 npts=1000
 
@@ -46,8 +47,8 @@ for i in range(0,npts):
     if deltaNLL_95 > graph.Eval(parval):
         param_95_pos=parval        
 
-print param_95_neg
-print param_95_pos
+print "95% confidence limits:"
+print "["+str(param_95_neg)+","+str(param_95_pos)+"]"
 
 #graph.GetXaxis().SetRangeUser(-0.5,0.5)
 #graph.GetYaxis().SetRangeUser(0,20)
