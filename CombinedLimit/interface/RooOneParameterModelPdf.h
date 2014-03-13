@@ -1,29 +1,28 @@
 // -*- mode: c++ -*-
 
-#ifndef ROOTWOPARAMETERMODELPDF
-#define ROOTWOPARAMETERMODELPDF
+#ifndef ROOONEPARAMETERMODELPDF
+#define ROOONEPARAMETERMODELPDF
 
 #include "RooRealProxy.h"
 #include "RooAbsPdf.h"
 #include "TProfile2D.h"
 #include "TString.h"
   
-class RooTwoParameterModelPdf : public RooAbsPdf {
+class RooOneParameterModelPdf : public RooAbsPdf {
 public:
   
-  RooTwoParameterModelPdf ();
-  RooTwoParameterModelPdf (const char * name, const char * title,
+  RooOneParameterModelPdf ();
+  RooOneParameterModelPdf (const char * name, const char * title,
 			  RooAbsReal& _x, 
-			  RooAbsReal& _param1, 
-			  RooAbsReal& _param2,
-			  RooAbsReal& _SM_shape,
+			  RooAbsReal& _param, 
+			   RooAbsReal& _SM_shape,
 			  const char * parFilename);
-  RooTwoParameterModelPdf (const RooTwoParameterModelPdf& other, const char * name);
+  RooOneParameterModelPdf (const RooOneParameterModelPdf& other, const char * name);
   virtual TObject * clone(const char * newname) const { 
-    return new RooTwoParameterModelPdf(*this, newname);
+    return new RooOneParameterModelPdf(*this, newname);
     }
   
-  virtual ~RooTwoParameterModelPdf ();
+  virtual ~RooOneParameterModelPdf ();
   
   Int_t getAnalyticalIntegral(RooArgSet& allVars, 
 			    RooArgSet& analVars, 
@@ -37,8 +36,7 @@ public:
 protected:
   
   RooRealProxy x;
-  RooRealProxy param1;
-  RooRealProxy param2;
+  RooRealProxy param;
   RooRealProxy SM_shape;
   
   mutable std::map<std::string,std::vector<double> > integral_basis;
@@ -49,7 +47,7 @@ protected:
 
   TString profileFilename;
   
-  TH2D ** P; //!
+  TH1D ** P; //!
   
   void initializeProfiles();
   void initializeBins(const RooAbsReal& shape) const;
@@ -57,13 +55,13 @@ protected:
 			       const RooAbsReal& dep,
 			       const RooAbsReal& shape) const;
   
-  void readProfiles(RooTwoParameterModelPdf const& other);
+  void readProfiles(RooOneParameterModelPdf const& other);
 
   virtual double evaluate() const ;
   
 private:
   
-  ClassDef(RooTwoParameterModelPdf, 4) 
+  ClassDef(RooOneParameterModelPdf, 4) 
 };
 
 #endif

@@ -23,8 +23,10 @@
 #include "../interface/RooATGCFunction.h"
 #include "../interface/RooATGCFunction_wz.h"
 #include "../interface/RooTwoParameterModelScaling.h"
+#include "../interface/RooOneParameterModelScaling.h"
 #include "../interface/RooATGCProcessScaling_wz.h"
 #include "../interface/RooTwoParameterModelPdf.h"
+#include "../interface/RooOneParameterModelPdf.h"
 #include "../interface/RooATGCSemiAnalyticPdf_wz.h"
 
 
@@ -110,8 +112,10 @@
 #pragma link C++ class RooATGCFunction+;
 #pragma link C++ class RooATGCFunction_wz+;
 #pragma link C++ class RooTwoParameterModelScaling+;
+#pragma link C++ class RooOneParameterModelScaling+;
 #pragma link C++ class RooATGCProcessScaling_wz+;
 #pragma link C++ class RooTwoParameterModelPdf+;
+#pragma link C++ class RooOneParameterModelPdf+;
 #pragma link C++ class RooATGCSemiAnalyticPdf_wz+;
 
 #endif

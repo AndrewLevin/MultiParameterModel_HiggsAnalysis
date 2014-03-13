@@ -1,7 +1,7 @@
 // -*- mode: c++ -*-
 
-#ifndef ROOTWOPARAMETERMODELPROCESSSCALING
-#define ROOTWOPARAMTERMODELPROCESSSCALING
+#ifndef ROOONEPARAMETERMODELPROCESSSCALING
+#define ROOONEPARAMETERMODELPROCESSSCALING
 
 #include "RooRealProxy.h"
 #include "RooAbsPdf.h"
@@ -9,20 +9,19 @@
 #include "TH2D.h"
 #include "TString.h"
   
-class RooTwoParameterModelScaling : public RooAbsReal {
+class RooOneParameterModelScaling : public RooAbsReal {
 public:
 
-  RooTwoParameterModelScaling ();
+  RooOneParameterModelScaling ();
 
-  RooTwoParameterModelScaling (const char * name, const char * title, RooAbsReal& _param1,
-			 RooAbsReal& _param2,
+  RooOneParameterModelScaling (const char * name, const char * title, RooAbsReal& _param,
 			       const char * th2d_filename, const char * th2d_name);
-  RooTwoParameterModelScaling (const RooTwoParameterModelScaling& other, const char * name);
+  RooOneParameterModelScaling (const RooOneParameterModelScaling& other, const char * name);
   virtual TObject * clone(const char * newname) const { 
-    return new RooTwoParameterModelScaling(*this, newname);
+    return new RooOneParameterModelScaling(*this, newname);
   }
   
-  virtual ~RooTwoParameterModelScaling ();  
+  virtual ~RooOneParameterModelScaling ();  
 
   void initialize_histograms();
   void read_histograms() const;
@@ -31,8 +30,7 @@ protected:
   
   //  RooRealProxy x;
   //  const RooAbsReal& x;
-  RooRealProxy param1;
-  RooRealProxy param2;
+  RooRealProxy param;
   
   // double SM_integral;
   // std::vector<double> integral_basis;
@@ -42,13 +40,13 @@ protected:
   TString th2d_filename; 
   TString th2d_name;
 
-  TH2D ** P; //!
+  TH1D ** P; //!
 
   virtual double evaluate() const ;
   
 private:
   
-  ClassDef(RooTwoParameterModelScaling, 6) 
+  ClassDef(RooOneParameterModelScaling, 6) 
 };
 
 #endif
