@@ -13,8 +13,6 @@ if (len(sys.argv) != 2):
     print "exiting"
     sys.exit(0)
 
-
-
 f=TFile(sys.argv[1],"r")
 limit=f.Get("limit")
 
@@ -28,6 +26,10 @@ graph=TGraph()
 
 for j in range(1,limit.GetEntries()-1):
     limit.GetEntry(j)
+    if j == 1:
+        min_parval = param[0]
+    if j == limit.GetEntries()-2:
+        max_parval = param[0]
     #print param[0]
     #print deltaNLL[0]
     graph.SetPoint(j-1,param[0],2*deltaNLL[0])
@@ -37,13 +39,13 @@ deltaNLL_95=ROOT.Math.chisquared_quantile_c(1-0.95,1)
 npts=1000
 
 for i in range(0,npts):
-    parval = -0.5 + i*(0.5+0.5)/npts
+    parval = min_parval + i*(max_parval-min_parval)/npts
     if deltaNLL_95 > graph.Eval(parval):
         param_95_neg=parval
         break
 
 for i in range(0,npts):
-    parval = -0.5 + i*(0.5+0.5)/npts
+    parval = min_parval + i*(max_parval-min_parval)/npts
     if deltaNLL_95 > graph.Eval(parval):
         param_95_pos=parval        
 
@@ -76,4 +78,4 @@ c1.Update()
 
 c1.SaveAs("deltaNLL.png")
 
-raw_input()
+#raw_input()
