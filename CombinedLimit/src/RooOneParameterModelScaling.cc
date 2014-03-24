@@ -39,20 +39,28 @@ RooOneParameterModelScaling::RooOneParameterModelScaling(const char *name,
    P(0)
 { 
   initialize_histograms();
-
 } 
 
 void RooOneParameterModelScaling::read_histograms() const
 {
 
+  string old_dir=gDirectory->GetPath();
+
   TFile * f = new TFile(th2d_filename);
+
+  gDirectory->cd(old_dir.c_str());
 
   assert(f);
   assert(P);
 
-  P[0] = (TH1D*)f->Get(th2d_name);
+  P[0] = (TH1D*)((TH1D*)f->Get(th2d_name))->Clone();
+
+  //make sure the histogram is not deleted when the file is closed, it is deleted in the destructor of this class
+  P[0]->SetDirectory(0); 
 
   assert(P[0]);
+
+  f->Close();
 
 }
 
@@ -90,7 +98,7 @@ Double_t RooOneParameterModelScaling::evaluate() const
   double v(param);
 
   if (!P || !P[0]) {
-    std::cout << "P not initialized ---> initializing it" << std::endl;
+    //std::cout << "P not initialized ---> initializing it" << std::endl;
     read_histograms();
   }
 
