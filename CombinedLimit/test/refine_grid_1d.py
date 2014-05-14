@@ -9,7 +9,7 @@ from ROOT import TFile, TF1, TH1D
 nGridPointsForNewF=200
 
 if (len(sys.argv) != 3):
-    print "format: python.py refine_grid_1d.py input_file_name output_file_name"
+    print "format: python2.6.py refine_grid_1d.py input_file_name output_file_name"
     print "exiting"
     sys.exit(0)
 
@@ -36,9 +36,10 @@ for key in sigFile.GetListOfKeys():
     
     func = TF1('fittingFunction','[0] + [1]*x + [2]*x*x',
                par1GridMin,par1GridMax)
-        
+
     anom_th1d.Fit(func,'R0','')
-    
+
+    outfile_newF.cd()
     newFormatInput = TH1D(anom_th1d.GetName()
                       ,anom_th1d.GetTitle(),
                       nGridPointsForNewF,par1GridMin,par1GridMax)
@@ -47,7 +48,7 @@ for key in sigFile.GetListOfKeys():
             par1_value=newFormatInput.GetXaxis().GetBinCenter(bin_x)
             yield_bin=func.GetParameter(0)+func.GetParameter(1)*par1_value+func.GetParameter(2)*par1_value*par1_value
             newFormatInput.SetBinContent(bin_x,yield_bin)
-            
-    outfile_newF.cd()
+
+
     newFormatInput.Write()
             

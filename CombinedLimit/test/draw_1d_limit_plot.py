@@ -18,20 +18,39 @@ limit=f.Get("limit")
 
 deltaNLL=array("f",[0])
 param=array("f",[0])
+iToy=array("i",[0])
 
-limit.SetBranchAddress("deltaNLL", deltaNLL);
+limit.SetBranchAddress("deltaNLL", deltaNLL)
 limit.SetBranchAddress("param",param)
+limit.SetBranchAddress("iToy",iToy)
 
 graph=TGraph()
 
+
+min_parval=None
+max_parval=None
+
+first_time=true
+
 for j in range(1,limit.GetEntries()-1):
     limit.GetEntry(j)
-    if j == 1:
+
+    #the first param value doesn't follow the same pattern as the other ones, maybe it is the minimum?
+    if first_time:
+        first_time=false
+        continue
+    
+    print param[0]
+    
+    if min_parval==None:
         min_parval = param[0]
-    if j == limit.GetEntries()-2:
+    if max_parval==None:
         max_parval = param[0]
-    #print param[0]
-    #print deltaNLL[0]
+        
+    if param[0] < min_parval:
+        min_parval = param[0]
+    if param[0] > max_parval:
+        max_parval = param[0]
     graph.SetPoint(j-1,param[0],2*deltaNLL[0])
 
 deltaNLL_95=ROOT.Math.chisquared_quantile_c(1-0.95,1)
@@ -52,11 +71,9 @@ for i in range(0,npts):
 print "95% confidence limits:"
 print "["+str(param_95_neg)+","+str(param_95_pos)+"]"
 
-#graph.GetXaxis().SetRangeUser(-0.5,0.5)
-#graph.GetYaxis().SetRangeUser(0,20)
 graph.GetXaxis().SetTitle("F_{T1} / #Lambda^{4} (10 TeV^{-4})")
 graph.GetYaxis().SetTitle("2*deltaNLL")
-graph.Draw("AC")
+graph.Draw("AP")
 
 l95_neg = TLine(param_95_neg,0,param_95_neg,80);
 l95_neg.SetLineColor(kRed)
