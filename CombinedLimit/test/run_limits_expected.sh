@@ -1,44 +1,27 @@
-python2.6 refine_grid_1d.py /home/anlevin/ww_scattering/aQGC_grids_1.root aQGC_grids_1_refined.root
-text2workspace.py -m 126 ss_ww_datacard_mll.txt -o ws_mll.root -P MultiParameterModel_MiscellaneousStuff.CommonTools.OneParameterPhysicsModel:my_1d_model --PO range_param=[-90,90] --PO scaling_filename=/home/anlevin/nd_limit/CMSSW_6_1_1/src/HiggsAnalysis/CombinedLimit/test/aQGC_grids_1_refined.root
-combine ws_mll.root -M MultiDimFit -P param --floatOtherPOIs=0 --algo=grid --points=5000 --minimizerStrategy=2 -t -1 --expectSignal=1
-mv higgsCombineTest.MultiDimFit.mH120.root higgsCombineTest.MultiDimFit.mH120.1.root
+operators_and_ranges="\
+1,-90,90
+2,-275,275
+3,-70,70
+4,-100,100
+9,-100,100
+10,-150,150
+11,-10,10
+12,-4.5,4.5
+13,-13,13
+"
 
-python2.6 refine_grid_1d.py /home/anlevin/ww_scattering/aQGC_grids_2.root aQGC_grids_2_refined.root
-text2workspace.py -m 126 ss_ww_datacard_mll.txt -o ws_mll.root -P MultiParameterModel_MiscellaneousStuff.CommonTools.OneParameterPhysicsModel:my_1d_model --PO range_param=[-275,275] --PO scaling_filename=/home/anlevin/nd_limit/CMSSW_6_1_1/src/HiggsAnalysis/CombinedLimit/test/aQGC_grids_2_refined.root
-combine ws_mll.root -M MultiDimFit -P param --floatOtherPOIs=0 --algo=grid --points=5000 --minimizerStrategy=2 -t -1 --expectSignal=1
-mv higgsCombineTest.MultiDimFit.mH120.root higgsCombineTest.MultiDimFit.mH120.2.root
+for operator_and_range in $operators_and_ranges
+do
 
-python2.6 refine_grid_1d.py /home/anlevin/ww_scattering/aQGC_grids_3.root aQGC_grids_3_refined.root
-text2workspace.py -m 126 ss_ww_datacard_mll.txt -o ws_mll.root -P MultiParameterModel_MiscellaneousStuff.CommonTools.OneParameterPhysicsModel:my_1d_model --PO range_param=[-70,70] --PO scaling_filename=/home/anlevin/nd_limit/CMSSW_6_1_1/src/HiggsAnalysis/CombinedLimit/test/aQGC_grids_3_refined.root
-combine ws_mll.root -M MultiDimFit -P param --floatOtherPOIs=0 --algo=grid --points=5000 --minimizerStrategy=2 -t -1 --expectSignal=1
-mv higgsCombineTest.MultiDimFit.mH120.root higgsCombineTest.MultiDimFit.mH120.3.root
+operator=`echo $operator_and_range | awk -F, '{print $1}'`
+lower=`echo $operator_and_range | awk -F, '{print $2}'`
+upper=`echo $operator_and_range | awk -F, '{print $3}'`
 
-python2.6 refine_grid_1d.py /home/anlevin/ww_scattering/aQGC_grids_4.root aQGC_grids_4_refined.root
-text2workspace.py -m 126 ss_ww_datacard_mll.txt -o ws_mll.root -P MultiParameterModel_MiscellaneousStuff.CommonTools.OneParameterPhysicsModel:my_1d_model --PO range_param=[-100,100] --PO scaling_filename=/home/anlevin/nd_limit/CMSSW_6_1_1/src/HiggsAnalysis/CombinedLimit/test/aQGC_grids_4_refined.root
-combine ws_mll.root -M MultiDimFit -P param --floatOtherPOIs=0 --algo=grid --points=5000 --minimizerStrategy=2 -t -1 --expectSignal=1
-mv higgsCombineTest.MultiDimFit.mH120.root higgsCombineTest.MultiDimFit.mH120.4.root
+combineCards.py /home/anlevin/ww_scattering/histo_limits_wwssll_nsign0_shape_8TeV_Bin0_${operator}.txt /home/anlevin/ww_scattering/histo_limits_wwssll_nsign0_shape_8TeV_Bin1_${operator}.txt /home/anlevin/ww_scattering/histo_limits_wwssll_nsign0_shape_8TeV_Bin2_${operator}.txt /home/anlevin/ww_scattering/histo_limits_wwssll_nsign0_shape_8TeV_Bin3_${operator}.txt >& ss_ww_datacard_mll_${operator}.txt
+python2.6 refine_grid_1d.py /home/anlevin/ww_scattering/aQGC_grids_${operator}.root aQGC_grids_${operator}_refined.root
+text2workspace.py -m 126 ss_ww_datacard_mll_${operator}.txt -o ws_mll_${operator}.root -P MultiParameterModel_MiscellaneousStuff.CommonTools.OneParameterPhysicsModel:my_1d_model --PO range_param=[${lower},${upper}] --PO scaling_filename=/home/anlevin/nd_limit/CMSSW_6_1_1/src/HiggsAnalysis/CombinedLimit/test/aQGC_grids_${operator}_refined.root
+combine ws_mll_${operator}.root -M MultiDimFit -P param --floatOtherPOIs=0 --algo=grid --points=5000 --minimizerStrategy=2 -t -1 --expectSignal=1
+mv higgsCombineTest.MultiDimFit.mH120.root higgsCombineTest.MultiDimFit.mH120.expected.${operator}.root
 
-python2.6 refine_grid_1d.py /home/anlevin/ww_scattering/aQGC_grids_9.root aQGC_grids_9_refined.root
-text2workspace.py -m 126 ss_ww_datacard_mll.txt -o ws_mll.root -P MultiParameterModel_MiscellaneousStuff.CommonTools.OneParameterPhysicsModel:my_1d_model --PO range_param=[-100,100] --PO scaling_filename=/home/anlevin/nd_limit/CMSSW_6_1_1/src/HiggsAnalysis/CombinedLimit/test/aQGC_grids_9_refined.root
-combine ws_mll.root -M MultiDimFit -P param --floatOtherPOIs=0 --algo=grid --points=5000 --minimizerStrategy=2 -t -1 --expectSignal=1
-mv higgsCombineTest.MultiDimFit.mH120.root higgsCombineTest.MultiDimFit.mH120.9.root
+done
 
-python2.6 refine_grid_1d.py /home/anlevin/ww_scattering/aQGC_grids_10.root aQGC_grids_10_refined.root
-text2workspace.py -m 126 ss_ww_datacard_mll.txt -o ws_mll.root -P MultiParameterModel_MiscellaneousStuff.CommonTools.OneParameterPhysicsModel:my_1d_model --PO range_param=[-150,150] --PO scaling_filename=/home/anlevin/nd_limit/CMSSW_6_1_1/src/HiggsAnalysis/CombinedLimit/test/aQGC_grids_10_refined.root
-combine ws_mll.root -M MultiDimFit -P param --floatOtherPOIs=0 --algo=grid --points=5000 --minimizerStrategy=2 -t -1 --expectSignal=1
-mv higgsCombineTest.MultiDimFit.mH120.root higgsCombineTest.MultiDimFit.mH120.10.root
-
-python2.6 refine_grid_1d.py /home/anlevin/ww_scattering/aQGC_grids_11.root aQGC_grids_11_refined.root
-text2workspace.py -m 126 ss_ww_datacard_mll.txt -o ws_mll.root -P MultiParameterModel_MiscellaneousStuff.CommonTools.OneParameterPhysicsModel:my_1d_model --PO range_param=[-10,10] --PO scaling_filename=/home/anlevin/nd_limit/CMSSW_6_1_1/src/HiggsAnalysis/CombinedLimit/test/aQGC_grids_11_refined.root
-combine ws_mll.root -M MultiDimFit -P param --floatOtherPOIs=0 --algo=grid --points=5000 --minimizerStrategy=2 -t -1 --expectSignal=1
-mv higgsCombineTest.MultiDimFit.mH120.root higgsCombineTest.MultiDimFit.mH120.11.root
-
-python2.6 refine_grid_1d.py /home/anlevin/ww_scattering/aQGC_grids_12.root aQGC_grids_12_refined.root
-text2workspace.py -m 126 ss_ww_datacard_mll.txt -o ws_mll.root -P MultiParameterModel_MiscellaneousStuff.CommonTools.OneParameterPhysicsModel:my_1d_model --PO range_param=[-4.5,4.5] --PO scaling_filename=/home/anlevin/nd_limit/CMSSW_6_1_1/src/HiggsAnalysis/CombinedLimit/test/aQGC_grids_12_refined.root
-combine ws_mll.root -M MultiDimFit -P param --floatOtherPOIs=0 --algo=grid --points=5000 --minimizerStrategy=2 -t -1 --expectSignal=1
-mv higgsCombineTest.MultiDimFit.mH120.root higgsCombineTest.MultiDimFit.mH120.12.root
-
-python2.6 refine_grid_1d.py /home/anlevin/ww_scattering/aQGC_grids_13.root aQGC_grids_13_refined.root
-text2workspace.py -m 126 ss_ww_datacard_mll.txt -o ws_mll.root -P MultiParameterModel_MiscellaneousStuff.CommonTools.OneParameterPhysicsModel:my_1d_model --PO range_param=[-13,13] --PO scaling_filename=/home/anlevin/nd_limit/CMSSW_6_1_1/src/HiggsAnalysis/CombinedLimit/test/aQGC_grids_13_refined.root
-combine ws_mll.root -M MultiDimFit -P param --floatOtherPOIs=0 --algo=grid --points=5000 --minimizerStrategy=2 -t -1 --expectSignal=1
-mv higgsCombineTest.MultiDimFit.mH120.root higgsCombineTest.MultiDimFit.mH120.13.root
