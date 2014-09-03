@@ -1,4 +1,4 @@
-from MultiParameterModel_MiscellaneousStuff.CommonTools.AnomalousCouplingModel import *
+from HiggsAnalysis.CombinedLimit.AnomalousCouplingModel import *
 import ROOT as r
 import os
 
